@@ -31,7 +31,7 @@ const getSmtp = emailSettings => {
   const smtp = useSmtpServerFromConfigFile ?
     SMTP_FROM_CONFIG_FILE :
     getSmtpFromEmailSettings(emailSettings);
-
+  //winston.info('Email sent', result);
   return smtp;
 }
 

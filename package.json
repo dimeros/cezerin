@@ -42,10 +42,12 @@
     "theme:export": "./scripts/theme-export.sh",
     "theme:build": "babel theme/src -d theme/dist --quiet && npm run webpack:store",
     "build": "npm run compile && npm run theme:build && npm run webpack:admin",
-    "build:watch": "npm run compile:watch & npm run webpack:store:watch & npm run webpack:admin:watch",
+    "build:watch": "concurrently --kill-others \"npm run compile:watch\" \"npm run webpack:store:watch\" \"npm run webpack:admin:watch\"",
     "start-api": "node src/api/server/index.js",
     "start-store": "node dist/store/server/index.js",
-    "start": "npm run start-api & npm run start-store"
+    "start": "set NODE_ENV=production npm run start-api & npm run start-store",
+    "start:watch": "concurrently --kill-others \"npm run start-api\" \"npm run start-store\" \"npm run build:watch\"",
+    "start:watch:2": "concurrently --kill-others \"npm run start-store\" \"npm run build:watch\""
   },
   "dependencies": {
     "babel-cli": "^6.26.0",
@@ -76,8 +78,7 @@
     "mongodb": "^3.0.4",
     "node-fetch": "^2.1.1",
     "node-sass": "^4.8.3",
-    "nodemailer": "^4.6.3",
-    "nodemailer-smtp-transport": "^2.7.4",
+    "npm": "^6.0.0",
     "query-string": "^5.1.1",
     "react": "^16.2.0",
     "react-chartjs-2": "^2.7.0",
@@ -108,5 +109,8 @@
   "engines": {
     "node": "^8.0.0",
     "npm": "^5.0.0"
+  },
+  "devDependencies": {
+    "concurrently": "^3.5.1"
   }
 }

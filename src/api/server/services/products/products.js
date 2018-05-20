@@ -64,12 +64,11 @@ class ProductsService {
       this.getAttributesIfNeeded(params, categories, matchTextQuery, projectQuery),
       SettingsService.getSettings()
     ]);
-
     const domain = generalSettings.domain || '';
     const ids = this.getArrayFromCSV(parse.getString(params.ids));
     const sku = this.getArrayFromCSV(parse.getString(params.sku));
 
-    let items = itemsResult.map(item => this.changeProperties(item, domain));
+    let items = (itemsResult|| []).map(item => this.changeProperties(item, domain));
     items = this.sortItemsByArrayOfIdsIfNeed(items, ids, sortQuery);
     items = this.sortItemsByArrayOfSkuIfNeed(items, sku, sortQuery);
     items = items.filter(item => !!item);

@@ -8,15 +8,23 @@ import RaisedButton from 'material-ui/RaisedButton'
 import Paper from 'material-ui/Paper'
 import TextField from 'material-ui/TextField';
 
+import { Card, CardText } from 'material-ui/Card';
+import {Link} from "react-router-dom";
+
 export default class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       email: localStorage.getItem('dashboard_email') || '',
-    	isFetching: false,
-    	isAuthorized: false,
-    	emailIsSent: false,
-    	error: null
+      isFetching: false,
+      isAuthorized: false,
+      emailIsSent: false,
+      error: null,
+
+
+
+      errors:{ email: 'Invalid' },
+      user:{ email: 'jane@doe.com', name: 'Jane Doe' }
     };
   }
 
@@ -40,26 +48,35 @@ export default class LoginForm extends React.Component {
       error: null
     });
 
+    debugger;
     CezerinClient.authorize(settings.apiBaseUrl, this.state.email)
-    .then(authorizeResponse => {
-      this.setState({
-        isFetching: false,
-        isAuthorized: false,
-        emailIsSent: authorizeResponse.json.sent,
-        error: authorizeResponse.json.error
+      .then(authorizeResponse => {
+        this.setState({
+          isFetching: false,
+          isAuthorized: false,
+          emailIsSent: authorizeResponse.json.sent,
+          error: authorizeResponse.json.error
+        });
+      })
+      .catch(error => {
+        this.setState({
+          isFetching: false,
+          isAuthorized: false,
+          emailIsSent: false,
+          error: error
+        });
       });
-    })
-    .catch(error => {
-      this.setState({
-        isFetching: false,
-        isAuthorized: false,
-        emailIsSent: false,
-        error: error
-      });
-    });
   }
 
+  onSubmit() {
+    console.log('submitted')
+  }
+
+  onChange = (e) => console.log('changed')
+
+
   componentWillMount() {
+    debugger;
     auth.checkTokenFromUrl();
   }
   componentDidMount() {}
@@ -83,31 +100,54 @@ export default class LoginForm extends React.Component {
     }
 
     return (
+
       <div className="row col-full-height center-xs middle-xs">
         <div className="col-xs-12 col-sm-8 col-md-6 col-lg-4">
-          <Paper className="loginBox" zDepth={1}>
-            <div className="loginTitle">{messages.loginTitle}</div>
-            <div className="loginDescription">{messages.loginDescription}</div>
-            <div className="loginInput">
-              <TextField
-                type='email'
-                value={email}
-                onChange={this.handleChange}
-                onKeyPress={this.handleKeyPress}
-                label={messages.email}
-                fullWidth={true}
-                hintStyle={{width: '100%'}}
-                hintText={messages.email}
-              />
-            </div>
-            <RaisedButton
-              label={messages.loginButton}
-              primary={true}
-              disabled={isFetching || emailIsSent}
-              onClick={this.handleSubmit}
-            />
-            {response}
-          </Paper>
+          <Card>
+            <form action="/" onSubmit={this.onSubmit}>
+              <h2 className="card-heading">Sign Up</h2>
+
+              {errors.summary && <p className="error-message">{errors.summary}</p>}
+
+              <div className="field-line">
+                <TextField
+                  floatingLabelText="Name"
+                  name="name"
+                  errorText={errors.name}
+                  onChange={this.onChange}
+                  value={user.name}
+                />
+              </div>
+
+              <div className="field-line">
+                <TextField
+                  floatingLabelText="Email"
+                  name="email"
+                  errorText={errors.email}
+                  onChange={this.onChange}
+                  value={user.email}
+                />
+              </div>
+
+              <div className="field-line">
+                <TextField
+                  floatingLabelText="Password"
+                  type="password"
+                  name="password"
+                  onChange={this.onChange}
+                  errorText={errors.password}
+                  value={user.password}
+                />
+
+              </div>
+
+              <div className="button-line">
+                <RaisedButton type="submit" label="Create New Account" primary />
+              </div>
+
+              <CardText>Already have an account? <Link to={'/login'}>Log in</Link></CardText>
+            </form>
+          </Card>
         </div>
       </div>
     );

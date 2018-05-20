@@ -3,6 +3,7 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom'
 
 import Head from 'modules/head'
 import Login from 'routes/login'
+import Remember from 'routes/remember'
 import Logout from 'routes/logout'
 import Home from 'routes/home'
 import NotFound from 'routes/notFound'
@@ -55,6 +56,7 @@ export default () => (
           <Switch>
             <Route path="/admin/" exact component={Home}/>
             <Route path="/admin/login" component={Login} />
+            <Route path="/admin/remember" component={Remember} />
             <Route path="/admin/logout" component={Logout} />
             <Route path="/admin/products" exact component={Products}/>
             <Route path="/admin/products/categories" exact component={ProductCategories}/>

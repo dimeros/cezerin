@@ -2,7 +2,7 @@ import settings from './settings'
 import api from './api'
 import messages from './text'
 
-const LOGIN_PATH = '/admin/login';
+const LOGIN_PATH = '/admin/remember';
 const HOME_PATH = '/admin/';
 
 const getParameterByName = (name, url) => {
